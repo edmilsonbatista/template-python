@@ -28,7 +28,7 @@ jobs:
           # Additional arguments for the sonarcloud scanner
           args:
             -Dsonar.projectKey=template-python
-            -Dsonar.sources=/myapp
+            -Dsonar.sources=myapp
             #-Dsonar.projectBaseDir=./myapp
             # Comma-separated paths to directories containing test source files.
             #-Dsonar.tests= # optional. For more info about Code Coverage, please refer to https://docs.sonarcloud.io/enriching/test-coverage/overview/
