@@ -10,24 +10,27 @@ jobs:
     name: SonarQube Code
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - uses: sonarsource/sonarqube-scan-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}  
-            
-      # If you wish to fail your job when the Quality Gate is red, uncomment the
-      # following lines. This would typically be used to fail a deployment.
-      # - uses: sonarsource/sonarqube-quality-gate-action@master
-      #   timeout-minutes: 5
-      #   env:
-      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        - uses: actions/checkout@v2
+          with:
+            fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+        - uses: sonarsource/sonarqube-scan-action@master
+          env:
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+            SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}  
 
-      - name:  New Code Period
-        uses: sonarsource/sonarqube-scan-action@master
-        env:
+        # If you wish to fail your job when the Quality Gate is red, uncomment the
+        # following lines. This would typically be used to fail a deployment.
+        # - uses: sonarsource/sonarqube-quality-gate-action@master
+        #   timeout-minutes: 5
+        #   env:
+        #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+    name:  New Code Period
+    runs-on: ubuntu-latest
+    steps:
+        - name: Set New Code Period
+        #uses: sonarsource/sonarqube-scan-action@master
+          env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}  
           #PROJECT_KEY: ${{ GITHUB_REPOSITORY }}  # Substitua pelo key do seu projeto no SonarQube
@@ -38,13 +41,11 @@ jobs:
             echo "::set-output name=response::$reponse"
             echo "::set-output name=success::true"
             echo "Resposta: $response"
-      
-      - name: Print Response
-        id: set_data
-        if: steps.set_period.outputs.success == 'true'
-        run: |
-          echo "New code period sucecessfully set!"
-          echo "Response: ${{ steps.set_period.outputs.response }}"
-          echo "::set-output name=date::$(date +'%Y-%m-%d')"
-        
-        shell: bash
+
+        - name: Print Response
+          id: set_data
+          if: steps.set_period.outputs.success == 'true'
+          run: |
+            echo "New code period sucecessfully set!"
+            echo "Response: ${{ steps.set_period.outputs.response }}"
+            echo "::set-output name=date::$(date +'%Y-%m-%d')"
