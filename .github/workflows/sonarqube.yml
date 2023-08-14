@@ -30,16 +30,16 @@ jobs:
     steps:
         - uses: sonarsource/sonarqube-scan-action@master
           env:
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}   
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
-          #PROJECT_KEY: ${{ GITHUB_REPOSITORY }}  # Substitua pelo key do seu projeto no SonarQube
-          FROM_DATE: ${{ steps.set_date.outputs.date }}
-          TO_DATE: ${{ steps.set_date.outputs.date }}
-          run: |
-            response=$(curl -s -X POST -H "Authorization: Bearer $SONARQUBE_TOKEN" "$SONARQUBE_URL/api/new_code_periods/set?project=$PROJECT_KEY&from=$FROM_DATE&to=$TO_DATE")
-            echo "::set-output name=response::$reponse"
-            echo "::set-output name=success::true"
-            echo "Resposta: $response"
+            SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}   
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
+            #PROJECT_KEY: ${{ GITHUB_REPOSITORY }}  # Substitua pelo key do seu projeto no SonarQube
+            FROM_DATE: ${{ steps.set_date.outputs.date }}
+            TO_DATE: ${{ steps.set_date.outputs.date }}
+            run: |
+              response=$(curl -s -X POST -H "Authorization: Bearer $SONARQUBE_TOKEN" "$SONARQUBE_URL/api/new_code_periods/set?project=$PROJECT_KEY&from=$FROM_DATE&to=$TO_DATE")
+              echo "::set-output name=response::$reponse"
+              echo "::set-output name=success::true"
+              echo "Resposta: $response"
 
         - name: Print Response
           id: set_data
