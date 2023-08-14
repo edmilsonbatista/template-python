@@ -25,8 +25,11 @@ jobs:
       #   env:
       #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-          #SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }} #https://seu-sonarqube.com  # Substitua pelo URL do seu servidor SonarQube
-          #SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+      - name:  New Code Period
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}  
           #PROJECT_KEY: ${{ GITHUB_REPOSITORY }}  # Substitua pelo key do seu projeto no SonarQube
           FROM_DATE: ${{ steps.set_date.outputs.date }}
           TO_DATE: ${{ steps.set_date.outputs.date }}
