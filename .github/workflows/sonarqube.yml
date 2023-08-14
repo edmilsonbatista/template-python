@@ -7,13 +7,14 @@ on:
 
 jobs:
   build:
-    name: SonarQube Analysis
+    name: SonarQube Code
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: SonarQube Analysis
+        uses: actions/checkout@v2
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - uses: sonarsource/sonarqube-scan-action@master
+        uses: sonarsource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}  
@@ -24,3 +25,26 @@ jobs:
       #   timeout-minutes: 5
       #   env:
       #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Set New Code Period
+        env:
+        SONARQUBE_URL: ${{ secrets.SONAR_HOST_URL }} #https://seu-sonarqube.com  # Substitua pelo URL do seu servidor SonarQube
+        SONARQUBE_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+        PROJECT_KEY: ${{ GITHUB_REPOSITORY }}  # Substitua pelo key do seu projeto no SonarQube
+        FROM_DATE: ${{ steps.set_date.outputs.date }}
+        TO_DATE: ${{ steps.set_date.outputs.date }}
+        run: |
+          response=$(curl -s -X POST -H "Authorization: Bearer $SONARQUBE_TOKEN" "$SONARQUBE_URL/api/new_code_periods/set?project=$PROJECT_KEY&from=$FROM_DATE&to=$TO_DATE")
+          echo "::set-output name=response::$reponse"
+          echo "::set-output name=success::true"
+          echo "Resposta: $response"
+      
+      - name: Print Response
+        id: set_data
+        if: steps.set_period.outputs.success == 'true'
+        run: |
+          echo "New code period sucecessfully set!"
+          echo "Response: ${{ steps.set_period.outputs.response }}"
+          echo "::set-output name=date::$(date +'%Y-%m-%d')"
+        
+        shell: bash
