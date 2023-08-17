@@ -47,5 +47,3 @@ jobs:
 #          echo "New code period sucecessfully set!"
 #          echo "Response: ${{ steps.set_period.outputs.response }}"
 #          echo "::set-output name=date::$(date +'%Y-%m-%d')"
-        
-        shell: bash
